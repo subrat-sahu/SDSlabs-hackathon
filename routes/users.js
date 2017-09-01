@@ -18,6 +18,7 @@ router.get('/login', function(req, res){
 });
 
 
+
 // Register User
 router.post('/register', function(req, res){
 	var name = req.body.name;
@@ -123,6 +124,7 @@ passport.deserializeUser(function(id, done) {
 	}
 });
 
+console.log(usr);
 
 router.post('/login',
   passport.authenticate('userStrategy', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
