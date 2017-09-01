@@ -8,7 +8,9 @@ router.get('/', ensureAuthenticated, function(req, res){
 router.get('/admins/dash', ensureAuthenticated2, function(req, res){
 	res.render('dashboard');
 });
-
+router.get('/complaint',ensureAuthenticated, function(req, res){
+	res.render('complaint');
+});
 router.get('/man', ensureAuthenticated2,function(req,res){
 
 	res.send("hello");
