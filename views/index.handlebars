@@ -39,7 +39,7 @@ $(function () {
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav">
                                 <li><a href="/complaint">Stream</a></li>
-                                <li><a href="#">My Activity</a></li>
+                                <li><a href="/complaint">Complaint</a></li>
                                 <li><span class="badge badge-important">2</span><a href="#"><i class="fa fa-bell-o fa-lg" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-envelope-o fa-lg" aria-hidden="true"></i></a></li>
                             </ul>
@@ -81,7 +81,7 @@ $(function () {
                                                             <a href="#" class="btn btn-default btn-sm"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Change Passowrd</a>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <a href="#" class="btn btn-default btn-sm pull-right"><i class="fa fa-power-off" aria-hidden="true"></i> Sign Out</a>
+                                                            <a href="/users/logout" class="btn btn-default btn-sm pull-right"><i class="fa fa-power-off" aria-hidden="true"></i> Sign Out</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -105,16 +105,16 @@ $(function () {
                         </div>
                         <div class="media-body">
                             <hr>
-                            <h3><strong>Bio</strong></h3>
+                            <h3><strong>{{user.username}}</strong></h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel gravida metus, non ultrices sapien. Morbi odio metus, dapibus non nibh id amet.</p>
                             <hr>
-                            <h3><strong>Location</strong></h3>
+                            <h3><strong>{{user.room}}</strong></h3>
                             <p>Earth</p>
                             <hr>
-                            <h3><strong>Gender</strong></h3>
+                            <h3><strong>{{user.enrollment}}</strong></h3>
                             <p>Unknown</p>
                             <hr>
-                            <h3><strong>Birthday</strong></h3>
+                            <h3><strong>{{user.email}}</strong></h3>
                             <p>January 01 1901</p>
                         </div>
                     </div>
@@ -156,7 +156,7 @@ $(function () {
                 </div>
             </div>
             <hr>
-            <!-- Simple post content example. -->
+            {{#each user.complaints}}
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="pull-left">
@@ -164,7 +164,7 @@ $(function () {
                             <img class="media-object img-circle" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
                         </a>
                     </div>
-                    <h4><a href="#" style="text-decoration:none;"><strong>John Doe</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
+                    <h4><a href="#" style="text-decoration:none;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
                     <span>
                         <div class="navbar-right">
                             <div class="dropdown">
@@ -185,13 +185,11 @@ $(function () {
                     </span>
                     <hr>
                     <div class="post-content">
-                        <p>Simple post content example.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel gravida metus, non ultrices sapien. Morbi odio metus, dapibus non nibh id amet.</p>
-                    </div>
+                        {{this.complaint}}          </div>
                     <hr>
                     <div>
                         <div class="pull-right btn-group-xs">
-                            <a class="btn btn-default btn-xs"><i class="fa fa-heart" aria-hidden="true"></i> Like</a>
+                            <a class="btn btn-default btn-xs"><i class="fa fa-heart" aria-hidden="true"></i> {{user.compType}}</a>
                             <a class="btn btn-default btn-xs"><i class="fa fa-retweet" aria-hidden="true"></i> Reshare</a>
                             <a class="btn btn-default btn-xs"><i class="fa fa-comment" aria-hidden="true"></i> Comment</a>
                         </div>
@@ -208,28 +206,17 @@ $(function () {
                             </a>
                         </div>
                         <div class="media-body">
-                            <textarea class="form-control" rows="1" placeholder="Comment"></textarea>
+
                         </div>
                     </div>
                 </div>
             </div>
+       {{/each}}
 
-                        <div class="pull-left">
-                            <p class="text-muted" style="margin-left:5px;"><i class="fa fa-globe" aria-hidden="true"></i> Public</p>
-                        </div>
-                        <br>
-                    </div>
-                    <hr>
-                    <div class="media">
-                        <div class="pull-left">
-                            <a href="#">
-                                <img class="media-object img-circle" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="35px" height="35px" style="margin-left:3px; margin-right:-5px;">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <textarea class="form-control" rows="1" placeholder="Comment"></textarea>
-                        </div>
-                    </div>
+            <!-- Simple post content example. -->
+
+<!-- this is the end -->
+
                 </div>
             </div>
         </div>

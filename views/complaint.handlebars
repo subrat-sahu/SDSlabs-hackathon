@@ -1,8 +1,36 @@
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style media="screen">
+#down{
+  position:relative;
+  margin-top: 30;
+}
+</style>
 <div class="container">
-	<form id="complain_form">
-		<input type="submit" name="comp" value="POST">
+	<form class="form-group" id="complain_form" method="post" action="/users/register/complaint">
+        <div class="form-group">
+          <label for="sel1">Select list (select one):</label>
+          <select name="compType" class="form-control" id="sel1">
+            <<option value="none">none</option>
+            <option value="electrician">Electrician</option>
+
+            <option value="carpenter" >Carpenter</option>
+
+          </select>
+          <br>
+
+        </div>
+
+
+
+    <div class="form-group" id="down">
+      <label for="comment">Complaint:</label>
+      <textarea class="form-control" rows="5" id="comment" for="inputSuccess" name = "comp"></textarea>
+    </div>
+
+    <button type="submit" class ="btn btn-info" name="button">Submit</button>
 	</form>
-	<textarea form="complain_form">
-		Your complain goes here.......
-	</textarea>
+
 </div>

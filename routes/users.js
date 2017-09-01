@@ -18,6 +18,7 @@ router.get('/login', function(req, res){
 });
 
 
+//router.get('/add',ensureAuthenticated, user.addComplaint);
 
 // Register User
 router.post('/register', function(req, res){
@@ -56,6 +57,7 @@ router.post('/register', function(req, res){
 			enrollment: enrollment,
 			complaints: []
 		});
+
 
 		User.createUser(newUser, function(err, user){
 			if(err) throw err;
@@ -115,16 +117,48 @@ passport.deserializeUser(function(id, done) {
 	if(isadmin){
 		Admin.getAdminById(id, function(err, user) {
 			done(err, user);
-			usr=user;
 		});}else{
 			User.getUserById(id, function(err, user) {
 				done(err, user);
-				usr=user;
+				usr = user;
 		});
-	}
+	};
+});
+//router.get('/addfriend', User.addComplaint);
+
+router.post('/register/complaint', function(req, res){
+	var nameC = req.user.username;
+	var roomC = req.user.room;
+	var enrollmentC = req.user.enrollment;
+	var usernameC = req.body.username;
+	var dateTimeC = req.body.password;
+  var compC =req.body.comp;
+	var idC = req.user._id;
+	var compType = req.body.compType;
+
+	var complaint = {complaint:compC,dateTime:Date(),details:{
+		username:nameC,
+		enrollment:enrollmentC,
+		room: roomC,
+		id : idC,
+		compType: compType
+	}};
+/*	console.log(req.user._id);
+	User.findByIdAndUpdate(
+    req.user._id,
+    {$push: {"complaints": complaint}},
+    {safe: true, upsert: true},
+    function(err, model) {
+        console.log(err);
+    }
+);*/
+User.addComplaint(complaint, function(err, doc) {
+	if(err) throw err;
+	console.log(doc);
+	res.redirect('/');
+});
 });
 
-console.log(usr);
 
 router.post('/login',
   passport.authenticate('userStrategy', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
@@ -136,8 +170,12 @@ router.get('/logout', function(req, res){
 	req.logout();
 
 	req.flash('success_msg', 'You are logged out');
-
-	res.redirect('/users/login');
+if(!isadmin)
+{	res.redirect('/users/login');}
+else
+	{res.redirect('/admins/signin');}
 });
+
+
 
 module.exports = router;

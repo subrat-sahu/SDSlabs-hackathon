@@ -26,7 +26,12 @@ var UserSchema = mongoose.Schema({
 	name: {
 		type: String
 	},
-	complaints:[]
+	complaints:[{complaint:String,dateTime:String,compType:String,details:{
+		username:String,
+		enrollment:String,
+		room: String,
+		id: String
+	}}]
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
@@ -55,3 +60,7 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
     	callback(null, isMatch);
 	});
 }
+module.exports.addComplaint= function (compl, callback)
+{
+User.findOneAndUpdate({_id :compl.details.id }, {$push: {complaints: compl}},{returnOriginal: false, upsert: true},callback)
+};
