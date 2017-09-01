@@ -1,0 +1,28 @@
+<div class="container">
+  <h2 class="page-header">Admin Register</h2>
+  {{#if errors}}
+        {{#each errors}}
+          <div class="alert alert-danger">{{msg}}</div>
+        {{/each}}
+  {{/if}}
+  <form method="post" action="/admins/signup">
+     <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="Name" name="name">
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" class="form-control" placeholder="Username" name="username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" class="form-control" placeholder="Password" name="password">
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" class="form-control" placeholder="Password" name="password2">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+
+</div>
