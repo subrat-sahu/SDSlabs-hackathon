@@ -1,12 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var Complaint = require('../models/complaints');
 
 // Get Homepage
 router.get('/', ensureAuthenticated, function(req, res){
 	res.render('index');
 });
-router.get('/admins/dash', ensureAuthenticated2, function(req, res){
-	res.render('dashboard');
+router.get('/admins/dash',ensureAuthenticated2,function(req,res){
+
+	console.log("  f   f f f f f ");
+Complaint.find({},function(err,docs){
+	res.render("dashboard", {
+     "entries" : docs
+});
+	});
 });
 router.get('/complaint',ensureAuthenticated, function(req, res){
 	res.render('complaint');

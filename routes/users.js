@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var isadmin=false;
 var usr;
 var User = require('../models/user');
 var Admin = require('../models/admin');
+var Complaint = require('../models/complaints');
 
 // Register
 router.get('/register', function(req, res){
@@ -135,29 +137,41 @@ router.post('/register/complaint', function(req, res){
   var compC =req.body.comp;
 	var idC = req.user._id;
 	var compType = req.body.compType;
+	console.log(compType   +  " compType");
 
-	var complaint = {complaint:compC,dateTime:Date(),details:{
+	var complaint = {complaint:compC,		compType: compType,dateTime:Date(),details:{
 		username:nameC,
 		enrollment:enrollmentC,
 		room: roomC,
 		id : idC,
-		compType: compType
+
 	}};
-/*	console.log(req.user._id);
-	User.findByIdAndUpdate(
-    req.user._id,
-    {$push: {"complaints": complaint}},
-    {safe: true, upsert: true},
-    function(err, model) {
-        console.log(err);
-    }
-);*/
+	var myData = new Complaint(complaint);
+  myData.save()
+    .then(item => {
+      console.log('done');
+    })
+    .catch(err => {
+    console.log('error');
+    });
+
+
 User.addComplaint(complaint, function(err, doc) {
 	if(err) throw err;
-	console.log(doc);
 	res.redirect('/');
 });
 });
+
+var getcomplaints = function (err,db) {
+Complaint.find({},function(err,docs){
+
+});
+};
+
+
+
+
+
 
 
 router.post('/login',

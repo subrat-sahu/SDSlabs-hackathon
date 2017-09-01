@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var Complaints = require('../models/complaints');
 var Admin = require('../models/admin');
 
 
@@ -51,6 +51,8 @@ router.post('/signup', function(req, res){
 		res.redirect('/admins/signin');
 	}
 });
+
+
 
 router.post('/signin',
   passport.authenticate('adminStrategy', {successRedirect:'/admins/dash', failureRedirect:'/admins/signin',failureFlash: true}),

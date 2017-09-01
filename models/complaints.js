@@ -1,40 +1,22 @@
 var mongoose = require('mongoose');
 
-var ComplaintSchema = mongoose.Schema({
-	complaint: {
-		type: String,
-		index:true
+var ComplaintSchema = mongoose.Schema(
+	{complaint:String,compType:String,dateTime:String,compType:String,details:{
+		username:String,
+		enrollment:String,
+		room: String,
+		id: String
+	}}
 
-	},
-	username: {
-		type: String
-	},
-  enrollment:{
-    type: String
-  },
-  date:{
-    type: String
-  },
-  room:{
-    type:String
-  },
-  status:{
-    type:Boolean
-  }
-
-});
+);
 
 var Complaint = module.exports = mongoose.model('Complaint', ComplaintSchema);
 
-module.exports.createComplaint = function(newComplaint, callback){
-	bcrypt.genSalt(10, function(err, salt) {
-	    bcrypt.hash(newUser.password, salt, function(err, hash) {
-	        newUser.password = hash;
-	        newUser.save(callback);
-	    });
-	});
-}
-
+module.exports.getcomplaints = function (req,res) {
+  var dat; Complaint.find({},function(err,data){
+		  res.locals.data = data || null;
+	 });
+};
 
 module.exports.getComplaintByUser = function(username, callback){
 	var query = {username: username};
