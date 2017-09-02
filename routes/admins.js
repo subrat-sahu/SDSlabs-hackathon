@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var Complaints = require('../models/complaints');
 var Admin = require('../models/admin');
+
 
 
 router.get('/signin',function(req,res){
@@ -38,6 +39,7 @@ router.post('/signup', function(req, res){
 			username: username,
 			password: password,
 			isAdmin: true,
+			userType: "admin",
 			complaints: []
 		});
 
@@ -52,17 +54,35 @@ router.post('/signup', function(req, res){
 	}
 });
 
+
+
+	router.post('/change',function(req,res){
+  var completedadmin = req.body.check;
+  Complaints.findOneAndUpdate({_id:req.body.complid},{$set:{"completedAdmin":completedadmin}},{new: true},function(err,docs){
+
+	if(err) throw err,
+  console.log(docs);
+	  req.flash('success_msg', 'Complaint succesfully logged');
+    res.redirect('/admins/dash');
+  });
+  });
+
+
+
+
+
+
 router.post('/signin',
   passport.authenticate('adminStrategy', {successRedirect:'/admins/dash', failureRedirect:'/admins/signin',failureFlash: true}),
   function(req, res) {
     res.redirect('/admins/dash');
   });
 
+
+
 router.get('/logout', function(req, res){
 	req.logout();
-
 	req.flash('success_msg', 'You are logged out');
-
 	res.redirect('/admins/signin');
 });
 

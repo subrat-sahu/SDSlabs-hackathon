@@ -8,6 +8,11 @@ var UserSchema = mongoose.Schema({
 		index:true
 
 	},
+	phone:{
+		type:String
+	},
+   userType: String
+	,
 	password: {
 		type: String
 	},
@@ -23,14 +28,19 @@ var UserSchema = mongoose.Schema({
 		type: String,
 		unique:true
 	},
-	name: {
-		type: String
-	},
-	complaints:[{complaint:String,dateTime:String,compType:String,details:{
-		username:String,
-		enrollment:String,
-		room: String,
-		id: String
+	resetPasswordToken: String,
+resetPasswordExpires: Date,
+	complaints:[{complaint:String,
+		complaintId: String,
+		completedUser:Boolean,
+		completedAdmin:Boolean,
+		DateTime:Number,
+		compType:String,
+		details:{
+			username:String,
+			enrollment:String,
+			room: String,
+			id: String
 	}}]
 });
 

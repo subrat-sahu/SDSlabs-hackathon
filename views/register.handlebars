@@ -1,15 +1,11 @@
 <div class="container">
-  <h2 class="page-header">Register</h2>
+  <h2 class="page-header">Register User</h2>
   {{#if errors}}
         {{#each errors}}
           <div class="alert alert-danger">{{msg}}</div>
         {{/each}}
   {{/if}}
   <form method="post" action="/users/register">
-     <div class="form-group">
-      <label>Name</label>
-      <input type="text" class="form-control" placeholder="Name" name="name">
-    </div>
     <div class="form-group">
       <label>Username</label>
       <input type="text" class="form-control" placeholder="Username" name="username">
@@ -20,8 +16,12 @@
     </div>
     <div class="form-group">
      <label>Enrollment no.</label>
-     <input type="text" class="form-control" placeholder="Enrollment No." name="enrollment">
+     <input type="Number" class="form-control" placeholder="Enrollment No." name="enrollment">
     </div>
+    <div>
+    <label>Phone No.</label>
+    <input type="number" class="form-control" placeholder="Phone no." name="phone">
+   </div>
     <div class="form-group">
      <label>Room</label>
      <input type="text" class="form-control" placeholder="Room no." name="room">

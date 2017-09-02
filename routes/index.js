@@ -1,24 +1,35 @@
 var express = require('express');
 var router = express.Router();
+var Complaint = require('../models/complaints');
 
 // Get Homepage
 router.get('/', ensureAuthenticated, function(req, res){
-	res.render('index');
+	Complaint.find({'details.id':req.user._id},function(err,docs){
+		res.render("index", {
+	     "data" : docs
+	});
+		});
 });
-router.get('/admins/dash', ensureAuthenticated2, function(req, res){
-	res.render('dashboard');
+router.get('/users/update/profile',ensureAuthenticated,function(req,res,next){
+  res.render('updateProfile');
+})
+router.get('/admins/dash',ensureAuthenticated2,function(req,res){
+
+   console.log(req.user);
+   Complaint.find({},function(err,docs){
+	 res.render("dashboard", {
+     "entries" : docs,
+		 "len":docs.length
+});
+	});
 });
 router.get('/complaint',ensureAuthenticated, function(req, res){
 	res.render('complaint');
 });
 
-router.get('/man', ensureAuthenticated2,function(req,res){
-
-	res.send("hello");
-});
 
 function ensureAuthenticated(req, res, next){
-	if(req.isAuthenticated()){
+	if(req.isAuthenticated() ){
 		return next();
 	} else {
 		//req.flash('error_msg','You are not logged in');
@@ -26,7 +37,7 @@ function ensureAuthenticated(req, res, next){
 	}
 }
 function ensureAuthenticated2(req, res, next){
-	if(req.isAuthenticated()){
+	if(req.isAuthenticated() && req.user.isAdmin){
 		return next();
 	} else {
 		res.render('404');
