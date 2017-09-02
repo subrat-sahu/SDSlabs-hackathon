@@ -131,23 +131,22 @@ $(function () {
             </div>
             <hr>
             {{#each entries}}
-            <div class="panel panel-default">
-                <div class="panel-body">
+            {{#if this.completedAdmin}}<div class="panel panel-success">
+              {{else}}<div class="panel panel-danger">{{/if}}
+                <div class="panel-heading">
                     <div class="pull-left">
                         <a href="#">
                             <img class="media-object img-circle" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
                         </a>
                     </div>
-<<<<<<< HEAD
-                    <h4><a href="#" style="text-decoration:none;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
-=======
+</div>
+<div class="panel-body">
                     <h4><a href="#" style="text-decoration:none;"><strong>{{this.details.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
                     <span>
                       {{#if this.completedUser}}
                      Stated complete by Admin {{user.username}}
                       {{/if}}
                     </span>
->>>>>>> c9093b8493398c340345e356720c4f0c6053006d
                     <hr>
                     <div class="post-content">
                         {{this.complaint}}          </div>
@@ -171,13 +170,13 @@ $(function () {
                         </form>
                         {{/if}}
 
-
+</div>
                     <hr>
-                    <div>
+                    <div class="panel-footer">
                       {{#if this.completedAdmin}}
                           {{#if this.completedUser}}
                       <div class="pull-right btn-group-xs">
-                          <a class="btn btn-default btn-xs">Completed</a>
+                          {{#if this.completedUser}}<i class="fa fa-check" style="color:green; font-size:28px;"></i>{{/if}}
                       </div>
                           {{/if}}
                       {{/if}}
@@ -189,7 +188,7 @@ $(function () {
                         <br>
                     </div>
 
-                </div>
+                
             </div>
        {{/each}}
 
