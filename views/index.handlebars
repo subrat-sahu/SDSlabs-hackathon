@@ -26,7 +26,9 @@ $(function () {
 <body class="">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">
-<div class="mainbody container-fluid">
+<div class="container-fluid">
+<div>
+<div class="mainbody">
     <div class="row">
         <div class="navbar-wrapper">
             <div class="container-fluid">
@@ -107,16 +109,17 @@ $(function () {
                         <div align="center">
                             <img class="thumbnail img-responsive" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="300px" height="300px">
                         </div>
-                        <div class="media-body">
+                        <div class="media-body"><center>
                             <hr>
-                            <h3><strong>{{user.username}}</strong></h3>
+                            <h4><i class="fa  fa-user">&nbsp;&nbsp;&nbsp;</i><strong>{{user.username}}</strong></h4>
                             <hr>
-                            <h3><strong>{{user.room}}</strong></h3>
+                            <h4><i class="fa  fa-building">&nbsp;&nbsp;&nbsp;</i><strong>{{user.room}}</strong></h4>
                             <hr>
-                            <h3><strong>{{user.enrollment}}</strong></h3>
+                            <h4><i class="fa  fa-mortar-board"></i>&nbsp;&nbsp;&nbsp;<strong>{{user.enrollment}}</strong></h4>
                             <hr>
-                            <h3><strong>{{user.email}}</strong></h3>
-                            <h4><strong>{{user.phone}}</strong></h4>
+                            <h4><i class="fa  fa-envelope">&nbsp;&nbsp;&nbsp;</i><strong>&nbsp;&nbsp;&nbsp; {{user.email}} </strong></h4>
+                            <hr>
+                            <h4><i class="fa  fa-phone">&nbsp;&nbsp;&nbsp;</i><strong>{{user.phone}}</strong></h4></center>
                         </div>
                     </div>
                 </div>
@@ -126,25 +129,27 @@ $(function () {
             <div class="panel panel-default">
                 <div class="panel-body">
                     <span>
-                        <h1 class="panel-title pull-left" style="font-size:30px;">{{user.username}} <small>{{user.enrollment}}</small> <i class="fa fa-check text-success" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"></i></h1>
+                        <h1 class="panel-title pull-left" style="font-size:30px;">{{user.username}} <small>{{user.enrollment}}</small> </h1>
                     </span>
                     <br><br><hr>
                     <span class="pull-left">
-                        <a href="#" class="btn btn-link" style="text-decoration:none;"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Complaints <span class="badge">2</span></a>
+                        <a href="#" class="btn btn-link" style="text-decoration:none;"><i class="fa fa-fw fa-user-circle" aria-hidden="true"></i> Complaints <span class="badge">2</span></a>
                     </span>
                 </div>
             </div>
             <hr>
             {{#each data}}
-            <div class="panel panel-default">
-                <div class="panel-body">
+            {{#if this.completedUser}}<div class="panel panel-success">
+              {{else}}<div class="panel panel-danger">{{/if}}
+              <div class="panel-heading">
                     <div class="pull-left">
                         <a href="#">
                             <img class="media-object img-circle" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
                         </a>
                     </div>
-                    <h4><a href="#" style="text-decoration:none;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
-
+                    <h4><a href="#" style="text-decoration:none; color:white;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:white;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
+              </div>
+<div class="panel-body">
 <span class ="alert">
     {{#if this.completedAdmin}}
    Stated complete by user {{this.username}}
@@ -161,7 +166,7 @@ $(function () {
 
                         {{else}}
                         <form class="form-inline kk" action="/users/change" method="post">
-                           <input type="text" id = "o" name="complid" value={{this.id}}>
+                           <input type="hidden" id = "o" name="complid" value={{this.id}}>
                           <label for="sel1">status :</label>
 
                           <select class="form-control"  name="check">
@@ -182,11 +187,12 @@ $(function () {
 
                     </div>
                     <hr>
-                    <div>
+
+</div>                    <div class="panel-footer">
                       {{#if this.completedAdmin}}
                           {{#if this.completedUser}}
                       <div class="pull-right btn-group-xs">
-                          <a class="btn btn-default btn-xs">Completed</a>
+                          {{#if this.completedUser}}<i class="fa fa-check" style="color:green; font-size:28px;"></i>{{/if}}
                       </div>
                           {{/if}}
                       {{/if}}
@@ -199,7 +205,7 @@ $(function () {
                     </div>
 
                 </div>
-            </div>
+
        {{/each}}
 
             <!-- Simple post content example. -->
