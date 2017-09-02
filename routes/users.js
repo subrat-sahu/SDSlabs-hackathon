@@ -8,8 +8,13 @@ var usr;
 var User = require('../models/user');
 var Admin = require('../models/admin');
 var Complaint = require('../models/complaints');
+var bcrypt = require('bcrypt-nodejs');
+var asynC = require('async');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
 var bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+var multer = require('multer');
+var fs = require('fs');
 
 // Register
 router.get('/register', function(req, res){
@@ -193,8 +198,8 @@ User.getUserById(req.user.id,function(err,user){
 
 //------------------------------------------------------
 
-app.post('/forgot', function(req, res, next) {
-  async.waterfall([
+router.post('/forgot', function(req, res, next) {
+  asynC.waterfall([
     function(done) {
       crypto.randomBytes(20, function(err, buf) {
         var token = buf.toString('hex');
@@ -217,40 +222,109 @@ app.post('/forgot', function(req, res, next) {
       });
     },
     function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport('SMTP', {
+      var smtpTransport = nodemailer.createTransport({
         service: 'SendGrid',
         auth: {
-          user: '!!! YOUR SENDGRID USERNAME !!!',
-          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+          user: 'subr47',
+          pass: '1234qwer'
         }
       });
       var mailOptions = {
         to: user.email,
         from: 'passwordreset@demo.com',
-        subject: 'Node.js Password Reset',
+        subject: 'BCRS Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'http://' + req.headers.host + '/users/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        res.flash('success_msg', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
         done(err, 'done');
       });
     }
   ], function(err) {
     if (err) return next(err);
-    res.redirect('/forgot');
+    res.redirect('/users/forgot');
+  });
+});
+
+router.get('/reset/:token', function(req, res) {
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      req.flash('error_msg', 'Password reset token is invalid or has expired.');
+      return res.redirect('/users/forgot');
+    }
+    res.render('reset', {
+      user: req.user
+    });
   });
 });
 
 
 
 
+
 //-------------------------------------------------------
+router.get('/forgot',function(req,res){
+	res.render('forgot');
+});
+//--------------------------------------------------------
+//--------------------------------------------------------
+
+router.post('/reset/:token', function(req, res) {
+  asynC.waterfall([
+    function(done) {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          req.flash('erro_msg', 'Password reset token is invalid or has expired.');
+          return res.redirect('back');
+        }
+
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+				bcrypt.genSalt(10, function(err, salt) {
+						bcrypt.hash(user.password, salt, function(err, hash) {
+								user.password = hash;
+								user.save(function(err) {
+				          req.logIn(user, function(err) {
+				            done(err, user);
+				          });
+				        });
+						});
+				});
+      });
+    },
+    function(user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+          user: 'subr47',
+          pass: '1234qwer'
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'passwordreset@demo.com',
+        subject: 'Your password has been changed',
+        text: 'Hello,\n\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('success', 'Success! Your password has been changed.');
+        done(err);
+      });
+    }
+  ], function(err) {
+    res.redirect('/');
+  });
+});
 
 
-
+//---------------------------------------------------------
+//---------------------------------------------------------
 
 
 
@@ -332,6 +406,18 @@ if(!isadmin)
 {	res.redirect('/users/login');}
 else
 	{res.redirect('/admins/signin');}
+});
+//===========================================================================--=-=-=-=-=-=-=-=-=-
+router.use(function(){multer({ dest: './uploads/',
+ rename: function (fieldname, filename) {
+   return filename;
+ },
+})});
+router.post('/api/photo',function(req,res){
+if(req.user)
+{ req.user.propic.data = fs.readFileSync(req.files.userPhoto.path)
+ req.user.propic.contentType = 'image/png';
+ req.user.save();}
 });
 
 

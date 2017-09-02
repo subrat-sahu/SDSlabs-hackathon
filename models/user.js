@@ -8,6 +8,9 @@ var UserSchema = mongoose.Schema({
 		index:true
 
 	},
+	propic:{
+		data: Buffer, contentType: String
+   },
 	phone:{
 		type:String
 	},
