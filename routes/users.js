@@ -4,17 +4,13 @@ var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var isadmin=false;
-var usr;
 var User = require('../models/user');
 var Admin = require('../models/admin');
 var Complaint = require('../models/complaints');
-var bcrypt = require('bcrypt-nodejs');
 var asynC = require('async');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var bcrypt = require('bcryptjs');
-var multer = require('multer');
-var fs = require('fs');
 
 // Register
 router.get('/register', function(req, res){
@@ -369,6 +365,7 @@ router.post('/register/complaint', function(req, res){
 	myData.save()
 		.then(item => {
 			console.log('done');
+			req.flash('success_msg','complaint logged succesfully');
 		})
 		.catch(err => {
 		console.log('error');
@@ -408,17 +405,6 @@ else
 	{res.redirect('/admins/signin');}
 });
 //===========================================================================--=-=-=-=-=-=-=-=-=-
-router.use(function(){multer({ dest: './uploads/',
- rename: function (fieldname, filename) {
-   return filename;
- },
-})});
-router.post('/api/photo',function(req,res){
-if(req.user)
-{ req.user.propic.data = fs.readFileSync(req.files.userPhoto.path)
- req.user.propic.contentType = 'image/png';
- req.user.save();}
-});
 
 
 
