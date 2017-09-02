@@ -13,7 +13,6 @@
 			exit();
 		}
 	?>
-
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="../style/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -32,7 +31,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand text-hide" href="#">Brand Text
+        <a class="navbar-brand text-hide" href="main.php">Brand Text
         </a>
       </div>
       <div id="navbar1" class="navbar-collapse collapse">
@@ -69,48 +68,48 @@
   		<?php
 
   			include '../db/connection.php';
-  			$name = $_SESSION['name'];
-  			$enrollno = $_SESSION['enrollno'];
-
+  			include '../db/userdetails.php';
   		?>
   			<h3 class="page-header">Update your Details...</h3>
   				<form method="post" action>
   					<div class="form-group">
   					<label for="name">Name:</label>
-  					<input type="text" name="name" value="<?php echo $name; ?>" class="form-control">
+  					<input type="text" name="name" value="<?php echo $user_name; ?>" class="form-control" required>
   					</div> 
   					<div class="form-group">
   					<label for="name">Room No:</label>
-  					<input type="text" name="roomno" value="" class="form-control">
+  					<input type="text" name="roomno" value="<?php echo $user_roomno; ?>" class="form-control" required>
   					</div> 
   					<div class="form-group">
   					<label for="name">Bhawan:</label>
-  					<input type="text" name="bhawan" value="" class="form-control">
+  					<input type="text" name="bhawan" value="<?php echo $user_bhawan; ?>" class="form-control" required>
   					</div>  
   					<div class="form-group">
   					<label for="name">Mobile No.:</label>
-  					<input type="tel" name="mobileno" value="" class="form-control">
+  					<input type="number" name="mobileno" value="<?php echo $user_mobileno; ?>" class="form-control" required>
   					</div> 
   					<div class="form-group">
   						<input type="submit" name="update" value="Update" class="btn btn-lg btn-primary">
   					</div>
   				</form>
   				<?php
-
-  					if (isset($_POST['update']))
-  					{
-  						$name = mysqli_real_escape_string($conn,$_POST['name']);
-  						$roomno = mysqli_real_escape_string($conn,$_POST['roomno']);
-  						$bhawan = mysqli_real_escape_string($conn,$_POST['bhawan']);
-  						$mobileno = mysqli_real_escape_string($conn,$_POST['mobileno']);
-
-  						$sql = "UPDATE users SET name='$name', room_no='$roomno', bhawan='$bhawan', mobile_no='$mobileno' WHERE enrollment_no='$enrollno' ";
-  						
-  						
-  					}
-
+            include '../db/updateprofile.php';
   				?>
+
+          <?php if ($_SESSION['url'] === 1) {echo '
+          <div class="jumbotron">
+            <h2 class="page-header">Change password</h2>
+            <form action method="post">
+              <div class="form-group"><input type="password" name="curpassword" class="form-control" required placeholder="Current Password"></div>
+              <div class="form-group"><input type="password" name="newpassword" class="form-control" required placeholder="New Password"></div>
+              <div class="form-group"><input type="password" name="confpassword" class="form-control" required placeholder="Confirm new Password"></div>
+              <input type="submit" name="change" class="btn btn-lg btn-danger" value="Change">
+            </form>'?>
+            <?php include '../db/changepassword.php';
+          echo '</div>';}
+          ?>
   		</div>
+
   		<div class="col-lg-3 col-md-3 hidden-sm hidden-xs"></div>
   	</div>
   </div>

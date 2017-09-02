@@ -1,7 +1,5 @@
 <?php 
 	
-	session_start();
-
 	include 'connection.php';
 
 	if (isset($_POST['register']))
@@ -19,6 +17,7 @@
 			{
 				$_SESSION['name'] = $name;
 				$_SESSION['enrollno'] = $enrollmentNo;
+				$_SESSION['url'] = 0;
 				header('Location:../public/update_profile.php');
 			}
 			else

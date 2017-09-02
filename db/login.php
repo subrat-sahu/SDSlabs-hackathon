@@ -1,7 +1,5 @@
 <?php
 
-	session_start();
-
 	include 'connection.php';
 
 	if(isset($_POST['login']))
@@ -21,7 +19,7 @@
 			header('Location: ../public/main.php');
 		}
 		else
-			echo "<p style='color:red'>Invalid enrollment no or password</p>";
+			echo "<p style='color:rgb(170,0,0)'><b>Invalid enrollment no or password</b></p>";
 	}
 
 ?>

@@ -1,6 +1,6 @@
 body{
-	background: black;
-	background: linear-gradient(black,lightgrey,black);
+	background: rgb(120,120,250);
+	/*background: linear-gradient(black,lightgrey,black);*/
 	color: white;
 	/*background: linear-gradient(black,lightgrey,black);*/
 }
@@ -17,8 +17,8 @@ h1{
 	margin-top: 10%;
 	border-top-left-radius: 0.5em;
 	border-top-right-radius: 0.5em;
-	background-color: rgba(80,80,80,1);
-	
+	/*background-color: rgba(80,80,80,1);*/
+	background-color: rgba(0,60,180,0.8);
 }
 .loginhead i{
 	float: right;
@@ -30,11 +30,23 @@ h1{
 	border-bottom-left-radius: 1em;
 	border-bottom-right-radius: 1em;
 	margin-bottom: 5%;
-	background-color: rgba(110,110,110,1);
+	/*background-color: rgba(110,110,110,1);*/
+	background-color: rgba(0,100,180,0.8)
 }
 
-@media only screen and (min-width: 768px) 
+@media only screen and (min-width: 768px) and (max-width: 1400px) 
 {
+	.head{
+	padding-top: 3%;
+	padding-bottom: 2%;
+	}
+	.loginhead{
+		margin-top: 8%;
+	}
+	.inputhead{
+		padding: 6% 4%;
+		margin-bottom: 2.5%;
+	}
 	body{
 		background-image: url("../img/4.jpg");
 		/*background: rgb(50,50,50);*/
@@ -42,10 +54,15 @@ h1{
 		background-repeat: no-repeat;
 		height: 100vh;
 	}
-	.loginhead{
-		background-color: rgba(0,60,180,1);
-	}
-	.inputhead{
-		background-color: rgba(0,100,180,1);
+}
+
+@media only screen and (min-width: 1400px)
+{
+	body{
+		background-image: url("../img/4.jpg");
+		/*background: rgb(50,50,50);*/
+		background-size: 100% 102%;
+		background-repeat: no-repeat;
+		height: 100vh;
 	}
 }
