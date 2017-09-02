@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var Complaint = require('../models/complaints');
 
+
+router.get('/complaint',ensureAuthenticated, function(req, res){
+	res.render('complaint');
+});
+router.get('/api/photo', function(req, res){
+	res.render('try');
+});
+
+
 // Get Homepage
 router.get('/', ensureAuthenticated, function(req, res){
 	Complaint.find({'details.id':req.user._id},function(err,docs){
@@ -10,9 +19,9 @@ router.get('/', ensureAuthenticated, function(req, res){
 	});
 		});
 });
-router.get('/users/update/profile',ensureAuthenticated,function(req,res,next){
+router.get('/users/update/profile',function(req,res,next){
   res.render('updateProfile');
-})
+});
 router.get('/admins/dash',ensureAuthenticated2,function(req,res){
 
    console.log(req.user);
@@ -23,9 +32,7 @@ router.get('/admins/dash',ensureAuthenticated2,function(req,res){
 });
 	});
 });
-router.get('/complaint',ensureAuthenticated, function(req, res){
-	res.render('complaint');
-});
+
 
 
 function ensureAuthenticated(req, res, next){
