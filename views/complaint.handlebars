@@ -12,8 +12,8 @@
 	<form class="form-group" id="complain_form" method="post" action="/users/register/complaint">
         <div class="form-group">
           <label for="sel1">Select list (select one):</label>
-          <select name="compType" class="form-control" id="sel1">
-            <option value="none">none</option>
+          <select name="compType" class="form-control" id="sel1" required>
+            <option value="">Select One</option>
             <option value="electrician">Electrician</option>
 
             <option value="carpenter" >Carpenter</option>
@@ -27,7 +27,7 @@
 
     <div class="form-group" id="down">
       <label for="comment">Complaint:</label>
-      <textarea class="form-control" rows="5" id="comment" for="inputSuccess" name = "comp"></textarea>
+      <textarea class="form-control" rows="5" id="comment" for="inputSuccess" name = "comp" required></textarea>
     </div>
 
     <button type="submit" class ="btn btn-info" name="button">Submit</button>
