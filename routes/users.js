@@ -39,10 +39,12 @@ router.post('/register', function(req, res){
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Email is not valid').isEmail();
 	req.checkBody('phone','Phone Not Provided').notEmpty();
+	req.checkBody('phone','Phone Not Valid').isMobilePhone("en-IN");
 	req.checkBody('room', 'room is required').notEmpty();
-	req.checkBody('password', 'enrollment is required').notEmpty();
+	req.checkBody('enrollment', 'enrollment is required').notEmpty();
 	req.checkBody('enrollment', 'Username is required').notEmpty();
-	req.checkBody('password', 'Password is required').notEmpty();
+	req.checkBody('password', 'Password should be Minimum 8 charachters').isLength({ min: 8 });
+	req.checkBody('password2', 'Password should be Minimum 8 charachters').isLength({ min: 8 });
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
 
@@ -227,7 +229,7 @@ router.post('/forgot', function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'passwordreset@demo.com',
+        from: 'Noreply@noreply.noreply',
         subject: 'BCRS Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -303,18 +305,18 @@ router.post('/reset/:token', function(req, res) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'passwordreset@demo.com',
+        from: 'noreply@noreply.noreply',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        req.flash('success', 'Success! Your password has been changed.');
+        req.flash('success_msg', 'Success! Your password has been changed.');
         done(err);
       });
     }
   ], function(err) {
-    res.redirect('/');
+    res.logout();
   });
 });
 

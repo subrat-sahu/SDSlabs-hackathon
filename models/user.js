@@ -58,8 +58,8 @@ module.exports.createUser = function(newUser, callback){
 	});
 }
 
-module.exports.getUserByUsername = function(username, callback){
-	var query = {username: username};
+module.exports.getUserByUsername = function(enrollment, callback){
+	var query = {enrollment: enrollment};
 	User.findOne(query, callback);
 }
 
