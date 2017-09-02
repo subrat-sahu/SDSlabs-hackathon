@@ -15,6 +15,14 @@
       <input type="text" class="form-control" placeholder="Username" name="username">
     </div>
     <div class="form-group">
+      <label for="sel1">Type:</label>
+      <select name="compType" class="form-control">
+        <option value="">none</option>
+        <option value="electrician">Electrician</option>
+        <option value="carpenter" >Carpenter</option>
+      </select>
+    </div>
+    <div class="form-group">
       <label>Password</label>
       <input type="password" class="form-control" placeholder="Password" name="password">
     </div>
@@ -22,7 +30,8 @@
       <label>Confirm Password</label>
       <input type="password" class="form-control" placeholder="Password" name="password2">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+
+    <button type="submit" class="btn btn-info">Submit</button>
   </form>
 
 </div>

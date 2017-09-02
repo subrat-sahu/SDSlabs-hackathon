@@ -24,8 +24,7 @@ router.get('/users/update/profile',function(req,res,next){
 });
 router.get('/admins/dash',ensureAuthenticated2,function(req,res){
 
-   console.log(req.user);
-   Complaint.find({},function(err,docs){
+   Complaint.find({compType:req.user.compType},function(err,docs){
 	 res.render("dashboard", {
      "entries" : docs,
 		 "len":docs.length

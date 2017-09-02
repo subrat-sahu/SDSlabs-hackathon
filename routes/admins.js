@@ -19,10 +19,11 @@ router.post('/signup', function(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
 	var password2 = req.body.password2;
-	console.log('name');
-
+	var compType = req.body.compType;
+  console.log(compType);
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('username', 'username is required').notEmpty();
+	req.checkBody('compType', 'Type is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
@@ -39,8 +40,8 @@ router.post('/signup', function(req, res){
 			username: username,
 			password: password,
 			isAdmin: true,
-			userType: "admin",
-			complaints: []
+			compType:compType,
+			userType: "admin"
 		});
 
 		Admin.createAdmin(newAdmin, function(err, user){
@@ -62,7 +63,7 @@ router.post('/signup', function(req, res){
 
 	if(err) throw err,
   console.log(docs);
-	  req.flash('success_msg', 'Complaint succesfully logged');
+	  req.flash('success_msg', 'Done complaint');
     res.redirect('/admins/dash');
   });
   });

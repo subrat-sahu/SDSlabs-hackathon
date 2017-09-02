@@ -13,7 +13,7 @@ userType:String
 	password: {
 		type: String
 	},
-complaints:[],
+	compType:String,
 isAdmin: {
 	type: Boolean
 }
