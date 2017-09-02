@@ -117,47 +117,49 @@ $(function () {
                 </div>
             </div>
         </div>
+
         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <span>
-                        <h1 class="panel-title pull-left" style="font-size:30px;">{{user.username}} <i class="fa fa-check text-success" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"></i></h1>
+                        <h1 class="panel-title pull-left" style="font-size:30px;">{{user.username}} <small>{{user.enrollment}}</small> </h1>
                     </span>
                     <br><br><hr>
                     <span class="pull-left">
-                        <a href="#" class="btn btn-link" style="text-decoration:none;"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Complaints <span class="badge">{{len}}</span></a>
+                        <a href="#" class="btn btn-link" style="text-decoration:none;"><i class="fa fa-fw fa-user-circle" aria-hidden="true"></i> Complaints <span class="badge">2</span></a>
                     </span>
                 </div>
             </div>
             <hr>
-            {{#each entries}}
-            {{#if this.completedAdmin}}<div class="panel panel-success">
+            {{#each data}}
+            {{#if this.completedUser}}<div class="panel panel-success">
               {{else}}<div class="panel panel-danger">{{/if}}
-                <div class="panel-heading">
+              <div class="panel-heading">
                     <div class="pull-left">
                         <a href="#">
                             <img class="media-object img-circle" src="https://lut.im/7JCpw12uUT/mY0Mb78SvSIcjvkf.png" width="50px" height="50px" style="margin-right:8px; margin-top:-5px;">
                         </a>
                     </div>
-</div>
+                    <h4><a href="#" style="text-decoration:none; color:white;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:white;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
+              </div>
 <div class="panel-body">
-                    <h4><a href="#" style="text-decoration:none;"><strong>{{this.details.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:grey;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
-                    <span>
-                      {{#if this.completedUser}}
-                     Stated complete by Admin {{user.username}}
-                      {{/if}}
-                    </span>
+<span class ="alert">
+    {{#if this.completedAdmin}}
+   Stated complete by user {{this.username}}
+    {{/if}}
+  </span>
                     <hr>
-                    <div class="post-content">
-                        {{this.complaint}}          </div>
+                    <div class="post-content float-left">
+                        {{this.complaint}}
 
 
 
-                        {{#if this.completedAdmin}}
+
+                        {{#if this.completedUser}}
 
                         {{else}}
-                        <form class="form-inline kk" action="/admins/change" method="post">
-                           <input type="text" id = "o" name="complid" value={{this.id}}>
+                        <form class="form-inline kk" action="/users/change" method="post">
+                           <input type="hidden" id = "o" name="complid" value={{this.id}}>
                           <label for="sel1">status :</label>
 
                           <select class="form-control"  name="check">
@@ -168,11 +170,18 @@ $(function () {
                           </select>
                           <button type="submit" class="btn btn-danger" name="button">submit</button>
                         </form>
+
+
                         {{/if}}
 
-</div>
+
+
+
+
+                    </div>
                     <hr>
-                    <div class="panel-footer">
+
+</div>                    <div class="panel-footer">
                       {{#if this.completedAdmin}}
                           {{#if this.completedUser}}
                       <div class="pull-right btn-group-xs">
@@ -180,16 +189,16 @@ $(function () {
                       </div>
                           {{/if}}
                       {{/if}}
-                        <div class="pull-left">
-                            <p  style="margin-left:5px;"><i class="fa fa-globe" aria-hidden="true"></i> Room :{{this.details.room}}</p>
-                            <p  style="margin-left:5px;"><i class="fa fa-globe" aria-hidden="true"></i> Enrollment : {{this.details.enrollment}}</p>
 
+
+                        <div class="pull-left">
+                            <p class="text-muted" style="margin-left:5px;"><i class="fa fa-globe" aria-hidden="true"></i> {{this.compType}}</p>
                         </div>
                         <br>
                     </div>
 
-                
-            </div>
+                </div>
+
        {{/each}}
 
             <!-- Simple post content example. -->
@@ -198,6 +207,7 @@ $(function () {
 
                 </div>
             </div>
+
         </div>
     </div>
 </div>
