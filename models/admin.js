@@ -8,6 +8,8 @@ var AdminSchema = mongoose.Schema({
 		unique:true
 
 	},
+userType:String
+	,
 	password: {
 		type: String
 	},

@@ -8,6 +8,8 @@ var usr;
 var User = require('../models/user');
 var Admin = require('../models/admin');
 var Complaint = require('../models/complaints');
+var bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 // Register
 router.get('/register', function(req, res){
@@ -31,10 +33,11 @@ router.post('/register', function(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
 	var password2 = req.body.password2;
+	var phone = req.body.phone;
 
-	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Email is not valid').isEmail();
+	req.checkBody('phone','Phone Not Provided').notEmpty();
 	req.checkBody('room', 'room is required').notEmpty();
 	req.checkBody('password', 'enrollment is required').notEmpty();
 	req.checkBody('enrollment', 'Username is required').notEmpty();
@@ -53,23 +56,40 @@ router.post('/register', function(req, res){
 		var newUser = new User({
 			name: name,
 			email:email,
+			userType:"user",
 			username: username,
 			password: password,
 			room: room,
+			phone:phone,
 			enrollment: enrollment,
 			complaints: []
 		});
 
 
 		User.createUser(newUser, function(err, user){
-			if(err) throw err;
-			console.log(user);
-		});
+
+			if (err) {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        // Duplicate username
+        return res.status(500).send({ succes: false, message: 'User already exist!' });
+      }
+			else throw err;
+
+      // Some other error
+      return res.status(500).send(err);
+
+
+    res.json({
+      success: true
+    });
+}
 
 		req.flash('success_msg', 'You are registered and can now login');
 
 		res.redirect('/users/login');
-	}
+
+});
+}
 });
 
 passport.use('userStrategy',new LocalStrategy(
@@ -80,7 +100,7 @@ passport.use('userStrategy',new LocalStrategy(
    		return done(null, false, {message: 'Unknown User'});
    	}
 
-   	User.comparePassword(password, user.password, function(err, isMatch){
+	User.comparePassword(password, user.password, function(err, isMatch){
    		if(err) throw err;
    		if(isMatch){
    			return done(null, user);
@@ -91,7 +111,7 @@ passport.use('userStrategy',new LocalStrategy(
    });
   }));
 
-	passport.use('adminStrategy',new LocalStrategy(
+  passport.use('adminStrategy',new LocalStrategy(
 	  function(username, password, done) {
 	   Admin.getAdmin(username, function(err, user){
 	   	if(err) throw err;
@@ -110,23 +130,142 @@ passport.use('userStrategy',new LocalStrategy(
 	   });
 	  }));
 
+
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+	var key = {
+    id: user.id,
+    type: user.userType
+  }
+
+done(null, key);
 isadmin = user.isAdmin;
 });
 
-passport.deserializeUser(function(id, done) {
-	if(isadmin){
-		Admin.getAdminById(id, function(err, user) {
-			done(err, user);
-		});}else{
-			User.getUserById(id, function(err, user) {
-				done(err, user);
-				usr = user;
-		});
-	};
-});
+passport.deserializeUser(function(key, done) {
+
+	var Model = key.type === 'user' ? User : Admin;
+Model.findOne({
+_id: key.id
+}, '-salt -password', function(err, user) {
+done(err, user);
+}
+)});
+
 //router.get('/addfriend', User.addComplaint);
+router.post('/newdata',function(req,res){
+  var usernameNew = req.body.username;
+	var roomNew = req.body.room;
+	var phoneNew = parseInt(req.body.phone);
+  console.log(req.user.phone);
+  User.findOneAndUpdate({_id:req.user._id},   { $set:
+      {
+      "username":usernameNew,
+			"room":roomNew,
+			"phone":phoneNew
+      }
+   },function(err,docs){
+		 if(err) throw err;
+  console.log("chala");
+	res.redirect('/users/update/profile');
+});
+
+});
+
+router.post('/update/password',function(req,res){
+var currpass = req.body.curpassword;
+var newpass = req.body.newpassword;
+var newpass2 = req.body.confpassword;
+
+
+req.checkBody('curpassword', 'Password is required').notEmpty();
+req.checkBody('newpassword', 'Email is not valid').notEmpty();
+req.checkBody('confpassword','Phone Not Provided').notEmpty();
+req.checkBody('confpassword', 'confirm is required').equals(req.body.newpassword);
+
+User.getUserById(req.user.id,function(err,user){
+  User.comparePassword(currpass,user.password,function(err,res){
+
+
+	});
+
+});
+});
+
+//------------------------------------------------------
+
+app.post('/forgot', function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ email: req.body.email }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.');
+          return res.redirect('/forgot');
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport('SMTP', {
+        service: 'SendGrid',
+        auth: {
+          user: '!!! YOUR SENDGRID USERNAME !!!',
+          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'passwordreset@demo.com',
+        subject: 'Node.js Password Reset',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        done(err, 'done');
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/forgot');
+  });
+});
+
+
+
+
+//-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+router.post('/change',function(req,res){
+var completeduser = req.body.check;
+ Complaint.update({_id:req.body.complid},{$set:{"completedUser":completeduser}},{new: true},function(err,docs){
+if(err) throw err,
+console.log(docs);
+  res.redirect('/');
+});
+});
 
 router.post('/register/complaint', function(req, res){
 	var nameC = req.user.username;
@@ -137,23 +276,32 @@ router.post('/register/complaint', function(req, res){
   var compC =req.body.comp;
 	var idC = req.user._id;
 	var compType = req.body.compType;
-	console.log(compType   +  " compType");
-
-	var complaint = {complaint:compC,		compType: compType,dateTime:Date(),details:{
-		username:nameC,
-		enrollment:enrollmentC,
-		room: roomC,
-		id : idC,
-
-	}};
+	//console.log(compType   +  " compType");
+  var d =new Date();
+	var complaint = {complaint:compC,
+		completedUser:false,
+		completedAdmin:false,
+		complaintId:"RandomShit",
+		compType: compType,
+		dateTime:d.getTime(),
+		details:{
+			username:nameC,
+			enrollment:enrollmentC,
+			room: roomC,
+			id : idC,}};
 	var myData = new Complaint(complaint);
-  myData.save()
-    .then(item => {
-      console.log('done');
-    })
-    .catch(err => {
-    console.log('error');
-    });
+
+	complaint.complaintId=myData._id;
+	myData.save()
+		.then(item => {
+			console.log('done');
+		})
+		.catch(err => {
+		console.log('error');
+		});
+		console.log(req.user.id);
+
+
 
 
 User.addComplaint(complaint, function(err, doc) {
@@ -162,11 +310,7 @@ User.addComplaint(complaint, function(err, doc) {
 });
 });
 
-var getcomplaints = function (err,db) {
-Complaint.find({},function(err,docs){
 
-});
-};
 
 
 

@@ -1,14 +1,17 @@
 var mongoose = require('mongoose');
 
 var ComplaintSchema = mongoose.Schema(
-	{complaint:String,compType:String,dateTime:String,compType:String,details:{
-		username:String,
-		enrollment:String,
-		room: String,
-		id: String
-	}}
-
-);
+	{complaint:String,
+		completedUser:Boolean,
+		completedAdmin:Boolean,
+		compType:String,
+		dateTime:Number,
+		details:{
+		 	username:String,
+		 	enrollment:String,
+		 	room: String,
+		 	id: String
+	}});
 
 var Complaint = module.exports = mongoose.model('Complaint', ComplaintSchema);
 

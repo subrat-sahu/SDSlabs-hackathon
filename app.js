@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var expressValidator = require('express-validator');
 var flash = require('connect-flash');
+var logger = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -21,6 +22,8 @@ var complaints= require('./models/complaints');
 // Init App
 var app = express();
 
+
+app.use(logger('dev'));
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout:'layout'}));
