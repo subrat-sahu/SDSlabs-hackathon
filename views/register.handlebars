@@ -1,11 +1,13 @@
-<style
-  background-image: url(../public/img/register.jpg);
-  background-size:100% 100%;
-  background-repeat: no-repeat;
-  opacity:0.75;
+
+<style>
+  .register_div{
+    background-color: lightgrey;
+    box-shadow: 10px 10px 5px #888888;
+  }
 </style>
 
-<div class="container" style="opacity:1">
+
+<div class="container register_div">
   <h2 class="page-header">Register User</h2>
   {{#if errors}}
         {{#each errors}}
