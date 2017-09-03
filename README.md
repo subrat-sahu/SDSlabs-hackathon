@@ -7,14 +7,14 @@
 2.1.3
 
 ### Usage
-A web portal on Node.js app which use a MongoDB database,Where you can log in complaints related to the hostel and daily small complaints! 
+A web portal on Node.js app which use a MongoDB database,Where you can log in complaints related to the hostel and daily small complaints! It uses Basic authentication using [passportjs](http://passportjs.org/) ,I have used two different local-strategies for User and Admin(But it is better to use ACL like [Permission](https://www.npmjs.com/package/permission))
 
 ### Installation
 
 Loginapp requires [Node.js](https://nodejs.org/) v4+ to run.
 And [MongoDB](https://www.mongodb.com/) Mongo Shell Version 3.4.7
 
-
+### Uses [Sendgrid](https://sendgrid.com/) Email service to send Email for forgotten password
 
 
 ### To run the application
