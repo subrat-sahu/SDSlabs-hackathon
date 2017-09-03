@@ -186,10 +186,25 @@ req.checkBody('confpassword','Phone Not Provided').notEmpty();
 req.checkBody('confpassword', 'confirm is required').equals(req.body.newpassword);
 
 User.getUserById(req.user.id,function(err,user){
-  User.comparePassword(currpass,user.password,function(err,res){
+
+	bcrypt.compare(currpass,user.password, function(err, isMatch) {
+		 if(err) throw err;
+		 if(isMatch){
+			 bcrypt.genSalt(10, function(err, salt) {
+		 	    bcrypt.hash(user.password, newpass, function(err, hash) {
+		 	        newUser.password = hash;
+		 	        newUser.save(function(){
+								res.flash('success_msg','password changed successfully');
+								res.redirect('/');
+
+							});
+		 	    });
+		 	});
 
 
-	});
+
+		 }
+ });
 
 });
 });
@@ -287,7 +302,7 @@ router.post('/reset/:token', function(req, res) {
 						bcrypt.hash(user.password, salt, function(err, hash) {
 								user.password = hash;
 								user.save(function(err) {
-				          req.logIn(user, function(err) {
+				          req.login(user, function(err) {
 				            done(err, user);
 				          });
 				        });

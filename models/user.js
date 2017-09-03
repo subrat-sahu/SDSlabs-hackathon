@@ -33,7 +33,7 @@ var UserSchema = mongoose.Schema({
 		unique:true
 	},
 	resetPasswordToken: String,
-resetPasswordExpires: Date,
+  resetPasswordExpires: Date,
 	complaints:[{complaint:String,
 		complaintId: String,
 		completedUser:Boolean,
