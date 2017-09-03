@@ -8,6 +8,7 @@ var UserSchema = mongoose.Schema({
 		index:true
 
 	},
+	isAdmin:false,
 	propic:{
 		data: Buffer, contentType: String
    },

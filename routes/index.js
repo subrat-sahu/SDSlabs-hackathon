@@ -35,11 +35,23 @@ router.get('/admins/dash',ensureAuthenticated2,function(req,res){
 
 
 function ensureAuthenticated(req, res, next){
-	if(req.isAuthenticated() ){
-		return next();
-	} else {
-		//req.flash('error_msg','You are not logged in');
+	if(req.user)
+{	if(req.isAuthenticated() && (req.user.isAdmin)){
+	 res.redirect('/admins/dash');
+	}
+  else if(!req.user.isAdmin && req.isAuthenticated()){
+   next();
+	 }
+	else {
 		res.redirect('/users/login');
+	}}
+	else{
+		if(req.isAuthenticated()){
+			next()
+		}
+		else{
+			res.redirect('/users/login');
+		}
 	}
 }
 function ensureAuthenticated2(req, res, next){

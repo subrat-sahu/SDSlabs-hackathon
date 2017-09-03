@@ -1,13 +1,21 @@
-<div class="container">
+<style>
+  .forget_div{
+    background-color: lightgrey;
+    box-shadow: 10px 10px 5px #888888;
+    padding:4%;
+    border-radius: 5px;
+  }
+</style>
+
+
+<div class="container forget_div">
   <h2>Enter Email</h2>
   <form method ="post"  action="/users/forgot">
     <div class="form-group">
-      <label for="email">Email:</label>
+
       <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
     </div>
-    <div class="checkbox">
-      <label><input type="checkbox" name="remember"> Remember me</label>
-    </div>
+
     <button type="submit" class="btn btn-info">Submit</button>
   </form>
 </div>

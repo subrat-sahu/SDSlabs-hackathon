@@ -10,13 +10,18 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            {{#if user}}
-              <li role="presentation"><a href="/">Dashboard</a></li>
-              <li role="presentation"><a href="/users/logout">Logout</a></li>
-							{{else if admin}}
-								<li role="presentation"><a href="/">sert</a></li>
-								<li role="presentation"><a href="/users/logout">Logout</a></li>
+
+            {{#if user.isAdmin}}
+						<li role="presentation"><a href="/">sert</a></li>
+						<li role="presentation"><a href="/admins/signout">Logout</a></li>
+
+							{{else if user.isAdmin}}
+							<li role="presentation"><a href="/users/forgot">Forgot Password</a></li>
+						<li role="presentation"><a href="/">Dashboard</a></li>
+						<li role="presentation"><a href="/users/logout">Logout</a></li>
+
             {{else}}
+						 <li role="presentation"><a href="/users/forgot">Forgot Password</a></li>
               <li role="presentation"><a href="/users/login">Login</a></li>
               <li role="presentation"><a href="/users/register">Register</a></li>
             {{/if}}
