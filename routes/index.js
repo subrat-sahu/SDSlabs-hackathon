@@ -9,6 +9,16 @@ router.get('/complaint',ensureAuthenticated, function(req, res){
 router.get('/api/photo', function(req, res){
 	res.render('try');
 });
+router.post('/admins/delete',function(req,res){
+     var id = req.body.complid;
+     Complaint.remove({_id:id},function(err,docs){
+			 if(err) throw err
+
+
+			 console.log(id);
+			 res.redirect('/admins/dash');
+		 });
+});
 
 
 // Get Homepage
@@ -31,6 +41,7 @@ router.get('/admins/dash',ensureAuthenticated2,function(req,res){
 });
 	});
 });
+
 
 
 

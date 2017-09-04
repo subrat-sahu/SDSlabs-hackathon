@@ -11,7 +11,7 @@ A web portal on Node.js app which use a MongoDB database,Where you can log in co
 
 ### Installation
 
-Loginapp requires [Node.js](https://nodejs.org/) v4+ to run.
+This App requires [Node.js](https://nodejs.org/) v4+ to run.
 And [MongoDB](https://www.mongodb.com/) Mongo Shell Version 3.4.7
 
 ### Uses [Sendgrid](https://sendgrid.com/) Email service to send Email for forgotten password
@@ -34,7 +34,7 @@ OR
 ```sh
 $ node bin/www
 ```
-OR If you have nodemon Installed!
+OR (If you have nodemon Installed)!
 ```sh
-nodemon bin/www
+$ nodemon bin/www
 ```

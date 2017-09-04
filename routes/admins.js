@@ -7,6 +7,8 @@ var Admin = require('../models/admin');
 
 
 
+
+
 router.get('/signin',function(req,res){
 	res.render('signin');
 });

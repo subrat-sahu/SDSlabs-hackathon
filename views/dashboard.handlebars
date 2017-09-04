@@ -146,6 +146,11 @@ $(function () {
                     </div>
                     <h4><a href="#" style="text-decoration:none; color:white;"><strong>{{user.username}}</strong></a> – <small><small><a href="#" style="text-decoration:none; color:white;"><i><i class="fa fa-clock-o" aria-hidden="true"></i> 42 minutes ago</i></a></small></small></h4>
               </div>
+              {{#if this.completedUser}}
+    <form  action="/admins/delete" method="post">   <input type="hidden" id = "o" name="complid" value={{this.id}}>
+      <button  style = "float: right;" type="submit" class = "btn btn-danger" name="button">Delete!</button>
+{{/if}}
+    </form>
 <div class="panel-body">
 
   {{#if this.completedUser}}
